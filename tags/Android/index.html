@@ -65,7 +65,7 @@
       
         <li class="list-item">
           
-            <a href="/" class="item-link active">Home</a>
+            <a href="/" class="item-link">Home</a>
           
         </li>
       
@@ -104,7 +104,7 @@
         
           <li class="menu-item">
             
-              <a href="/" class="menu-link mobile-active">Home</a>
+              <a href="/" class="menu-link">Home</a>
             
           </li>
         
@@ -137,78 +137,48 @@
   </div>
 </header>
 
-    <main class="app-body">
+    <div id="article-banner">
+  <h2>Archives</h2>
+  <p class="post-date">文章归档</p>
+</div>
+<main class="app-body" id="archives">
   
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2018/07/18/Android-获取程序运行时进程名的方法/">Android 获取程序运行时进程名的方法</a>
-      </h2>
-      <p class="article-date">July 18, 2018</p>
-      
-        
-  <a href="/tags#Android" >
-    <span class="tag-code">Android</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          背景：1在Android应用中，可以把四大组件（Activity,Service,ContentProvider,BroadcastReceiver）放在不同进程中运行，所以应用的的一些基础配置在初始化的时候，需要考虑不同进程的问题。
-代码：1234567891011121314151617 ...
-        
+  
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2018
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/2018/07/18/Android-获取程序运行时进程名的方法/" class="archive-title">Android 获取程序运行时进程名的方法</a>
+        <p class="archive-date">07-18</p>
       </div>
-      <a class="more" href="/2018/07/18/Android-获取程序运行时进程名的方法/">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2018/07/08/工作中常用的git命令/">工作中常用的git命令</a>
-      </h2>
-      <p class="article-date">July 8, 2018</p>
-      
-        
-  <a href="/tags#git" >
-    <span class="tag-code">git</span>
-  </a>
-
-      
-      <div class="article-summary">
-        
-          1. 推送（push）
-推送本地仓库分支到对应远程仓库分支1git push origin master
-
-推送本地库分支到远程库对应分支(包含新打的标签)1git push --tags origin master
-
-
-2. 参考
-Github文档
-官方文档
-
-
-        
+    
+      <div class="section-list-item">
+        <a href="/2018/07/08/工作中常用的git命令/" class="archive-title">工作中常用的git命令</a>
+        <p class="archive-date">07-08</p>
       </div>
-      <a class="more" href="/2018/07/08/工作中常用的git命令/">Read more</a>
-    </article>
-  
-    <article class="article-card">
-      <h2 class="article-head">
-        <a href="/2018/07/08/hello-world/">Hello World</a>
-      </h2>
-      <p class="article-date">July 8, 2018</p>
-      
-      <div class="article-summary">
-        
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer ...
-        
+    
+      <div class="section-list-item">
+        <a href="/2018/07/08/hello-world/" class="archive-title">Hello World</a>
+        <p class="archive-date">07-08</p>
       </div>
-      <a class="more" href="/2018/07/08/hello-world/">Read more</a>
-    </article>
-  
-
+    
+  </div>
+</section>
   
 </main>
 
-
+<script>
+  (function () {
+    var url = 'https://seamanz.github.io/tags/Android/index.html';
+    $('#article-banner').geopattern(url);
+    $('.header').removeClass('fixed-header');
+  })();
+</script>
     <div class="scroll-top">
   <span class="arrow-icon"></span>
 </div>
