@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="记录一下历史点滴。">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Android O 自动填充框架BUG及修复 | Seaman写字的地方
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Seaman写字的地方</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Android O 自动填充框架BUG及修复</h2>
+  <p class="post-date">2018-07-25</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h3 id="在平时开发中，给输入框-EditText-设置提示文字的时候，一般通过设置XML中的属性-android-hint-当然也可以通过Java代码设置，但如下样例结合-TextInputLayout-使用的时候，在Android-O-即8-0的系统运行的时候，会出现”java-lang-NullPointerException-Attempt-to-invoke-virtual-method-‘void-android-view-View-getBoundsOnScreen-android-graphics-Rect-’-on-a-null-object-reference”异常。"><a href="#在平时开发中，给输入框-EditText-设置提示文字的时候，一般通过设置XML中的属性-android-hint-当然也可以通过Java代码设置，但如下样例结合-TextInputLayout-使用的时候，在Android-O-即8-0的系统运行的时候，会出现”java-lang-NullPointerException-Attempt-to-invoke-virtual-method-‘void-android-view-View-getBoundsOnScreen-android-graphics-Rect-’-on-a-null-object-reference”异常。" class="headerlink" title="在平时开发中，给输入框 EditText 设置提示文字的时候，一般通过设置XML中的属性 android:hint ,当然也可以通过Java代码设置，但如下样例结合 TextInputLayout 使用的时候，在Android O 即8.0的系统运行的时候，会出现”java.lang.NullPointerException: Attempt to invoke virtual method ‘void android.view.View.getBoundsOnScreen(android.graphics.Rect)’ on a null object reference”异常。"></a>在平时开发中，给输入框 <a href="https://developer.android.google.cn/reference/android/widget/EditText" target="_blank" rel="noopener">EditText</a> 设置提示文字的时候，一般通过设置XML中的属性 <a href="https://developer.android.google.cn/reference/android/widget/TextView.html#attr_android:hint" target="_blank" rel="noopener">android:hint</a> ,当然也可以通过Java代码设置，但如下样例结合 <a href="https://developer.android.google.cn/reference/android/support/design/widget/TextInputLayout" target="_blank" rel="noopener">TextInputLayout</a> 使用的时候，在Android O 即8.0的系统运行的时候，会出现”java.lang.NullPointerException: Attempt to invoke virtual method ‘void android.view.View.getBoundsOnScreen(android.graphics.Rect)’ on a null object reference”异常。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.design.widget.TextInputLayout</span><br><span class="line">       android:layout_width=&quot;match_parent&quot;</span><br><span class="line">       android:layout_height=&quot;wrap_content&quot;&gt;</span><br><span class="line"></span><br><span class="line">       &lt;EditText</span><br><span class="line">           android:layout_width=&quot;match_parent&quot;</span><br><span class="line">           android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">           android:hint=&quot;@string/state&quot;</span><br><span class="line">           android:imeOptions=&quot;actionNext&quot;</span><br><span class="line">           android:inputType=&quot;textCapSentences&quot;</span><br><span class="line">           android:maxLines=&quot;1&quot;</span><br><span class="line">           android:singleLine=&quot;true&quot; /&gt;</span><br><span class="line">   &lt;/android.support.design.widget.TextInputLayout&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="具体异常信息如下，这是已知的系统BUG-Android-O-Preview-3-AssistStructure-View-getBoundsOnScreen-NPE："><a href="#具体异常信息如下，这是已知的系统BUG-Android-O-Preview-3-AssistStructure-View-getBoundsOnScreen-NPE：" class="headerlink" title="具体异常信息如下，这是已知的系统BUG  Android O Preview 3 AssistStructure View.getBoundsOnScreen NPE："></a>具体异常信息如下，这是已知的系统BUG <a href="https://issuetracker.google.com/issues/62834931" target="_blank" rel="noopener"> Android O Preview 3 AssistStructure View.getBoundsOnScreen NPE</a>：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Fatal Exception: java.lang.NullPointerException: Attempt to invoke virtual method &apos;void android.view.View.getBoundsOnScreen(android.graphics.Rect)&apos; on a null object reference</span><br><span class="line">       at android.app.assist.AssistStructure$WindowNode.(AssistStructure.java:484)</span><br><span class="line">       at android.app.assist.AssistStructure.(AssistStructure.java:1908)</span><br><span class="line">       at android.app.ActivityThread.handleRequestAssistContextExtras(ActivityThread.java:3070)</span><br><span class="line">       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1832)</span><br><span class="line">       at android.os.Handler.dispatchMessage(Handler.java:105)</span><br><span class="line">       at android.os.Looper.loop(Looper.java:171)</span><br><span class="line">       at android.app.ActivityThread.main(ActivityThread.java:6688)</span><br><span class="line">       at java.lang.reflect.Method.invoke(Method.java)</span><br><span class="line">       at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:246)</span><br><span class="line">       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:783)</span><br></pre></td></tr></table></figure>
+<h3 id="在参考了多种方案，本人感觉比较可靠的方案是把-android-hint-移动到-TextInputLayout-里设置属性："><a href="#在参考了多种方案，本人感觉比较可靠的方案是把-android-hint-移动到-TextInputLayout-里设置属性：" class="headerlink" title="在参考了多种方案，本人感觉比较可靠的方案是把 android:hint 移动到 TextInputLayout 里设置属性："></a>在参考了多种方案，本人感觉比较可靠的方案是把 <a href="https://developer.android.google.cn/reference/android/widget/TextView.html#attr_android:hint" target="_blank" rel="noopener">android:hint</a> 移动到 <a href="https://developer.android.google.cn/reference/android/support/design/widget/TextInputLayout" target="_blank" rel="noopener">TextInputLayout</a> 里设置属性：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.design.widget.TextInputLayout</span><br><span class="line">       android:layout_width=&quot;match_parent&quot;</span><br><span class="line">       android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:hint=&quot;@string/state&quot; &gt;</span><br><span class="line"></span><br><span class="line">       &lt;EditText</span><br><span class="line">           android:layout_width=&quot;match_parent&quot;</span><br><span class="line">           android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">           android:imeOptions=&quot;actionNext&quot;</span><br><span class="line">           android:inputType=&quot;textCapSentences&quot;</span><br><span class="line">           android:maxLines=&quot;1&quot;</span><br><span class="line">           android:singleLine=&quot;true&quot; /&gt;</span><br><span class="line">   &lt;/android.support.design.widget.TextInputLayout&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="https://stackoverflow.com/questions/45898228/android-attempt-to-invoke-virtual-method-void-android-view-view-getboundsonsc" target="_blank" rel="noopener">Android - Attempt to invoke virtual method ‘void android.view.View.getBoundsOnScreen(android.graphics.Rect)’ on a null object reference</a></p>
+</li>
+<li><p><a href="https://github.com/FlowCrypt/flowcrypt-android/issues/249" target="_blank" rel="noopener">flowcrypt-android/issues/249</a></p>
+</li>
+<li><p><a href="https://github.com/FlowCrypt/flowcrypt-android/commit/18f83cf42c51c2c5f7fbe4ff07744beafd6c69bb" target="_blank" rel="noopener">owcrypt-android/commit/18f83cf42c51c2c5f7fbe4ff07744beafd6c69bb</a></p>
+</li>
+</ul>
+<ul>
+<li><p><a href="https://exceptionshub.com/android-8-0-oreo-crash-on-focusing-textinputedittext.html" target="_blank" rel="noopener">Android 8.0 Oreo crash on focusing TextInputEditText1</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/45840856/android-8-0-oreo-crash-on-focusing-textinputedittext" target="_blank" rel="noopener">Android 8.0 Oreo crash on focusing TextInputEditText<br>2</a></p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/45731372/disabling-android-o-auto-fill-service-for-an-application/47021399#47021399" target="_blank" rel="noopener">Disabling Android O auto-fill service for an application
+</a></p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Android" >
+    <span class="tag-code">Android</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/07/18/Android-获取程序运行时进程名的方法/">
+        <span class="nav-arrow">← </span>
+        
+          Android 获取程序运行时进程名的方法
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#在平时开发中，给输入框-EditText-设置提示文字的时候，一般通过设置XML中的属性-android-hint-当然也可以通过Java代码设置，但如下样例结合-TextInputLayout-使用的时候，在Android-O-即8-0的系统运行的时候，会出现”java-lang-NullPointerException-Attempt-to-invoke-virtual-method-‘void-android-view-View-getBoundsOnScreen-android-graphics-Rect-’-on-a-null-object-reference”异常。"><span class="toc-nav-text">在平时开发中，给输入框 EditText 设置提示文字的时候，一般通过设置XML中的属性 android:hint ,当然也可以通过Java代码设置，但如下样例结合 TextInputLayout 使用的时候，在Android O 即8.0的系统运行的时候，会出现”java.lang.NullPointerException: Attempt to invoke virtual method ‘void android.view.View.getBoundsOnScreen(android.graphics.Rect)’ on a null object reference”异常。</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#具体异常信息如下，这是已知的系统BUG-Android-O-Preview-3-AssistStructure-View-getBoundsOnScreen-NPE："><span class="toc-nav-text">具体异常信息如下，这是已知的系统BUG  Android O Preview 3 AssistStructure View.getBoundsOnScreen NPE：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#在参考了多种方案，本人感觉比较可靠的方案是把-android-hint-移动到-TextInputLayout-里设置属性："><span class="toc-nav-text">在参考了多种方案，本人感觉比较可靠的方案是把 android:hint 移动到 TextInputLayout 里设置属性：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参考"><span class="toc-nav-text">参考</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://seamanz.github.io/2018/07/25/Android-O-自动填充框架BUG及修复/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "seamanz";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Android O 自动填充框架BUG及修复",
+        owner: "seamanz",
+        repo: "seamanz.github.io",
+        oauth: {
+          client_id: "f5ca274acf338f7016b7",
+          client_secret: "a9b138b34441fe32d1a04e5aa829a7747462e17c"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <br>
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- 不蒜子访客统计 -->
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
