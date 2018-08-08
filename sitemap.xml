@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://seamanz.github.io/2018/08/08/google-services%E6%8F%92%E4%BB%B6%E3%80%8CNo-match-found%E3%80%8DBUG/</loc>
+    
+    <lastmod>2018-08-08T14:51:15.486Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://seamanz.github.io/2018/07/25/Android-O-%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85%E6%A1%86%E6%9E%B6BUG%E5%8F%8A%E4%BF%AE%E5%A4%8D/</loc>
     
     <lastmod>2018-07-25T14:18:41.524Z</lastmod>
@@ -30,14 +37,14 @@
   </url>
   
   <url>
-    <loc>https://seamanz.github.io/about/index.html</loc>
+    <loc>https://seamanz.github.io/project/index.html</loc>
     
     <lastmod>2018-07-08T08:42:22.414Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://seamanz.github.io/project/index.html</loc>
+    <loc>https://seamanz.github.io/about/index.html</loc>
     
     <lastmod>2018-07-08T08:42:22.414Z</lastmod>
     
