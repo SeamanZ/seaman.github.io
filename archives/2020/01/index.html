@@ -10,7 +10,7 @@
   
   <title>
     
-      About | Seaman写字的地方
+      Seaman写字的地方
     
   </title>
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -137,46 +137,103 @@
   </div>
 </header>
 
-    <div id="about-banner" style="background-image: url(http://file.muyutech.com/about.jpg)"></div>
-<div class="author">
-  <div class="head">
-    <img src="https://avatars0.githubusercontent.com/u/23123044?s=400&u=723a09791b8409415d8b9abb447b9f369b844447&v=4" />
-  </div>
-  <h3>Seaman</h3>
-  
-    <p class="description">The end is always near.</p>
-  
-  <section class="share-icons">
-    
-    
-    
-      <a class="icon-github" href="https://github.com/seamanz" target="_blank">
-        <span class="fa-stack fa-lg">
-          <i class="fa fa-circle fa-stack-2x"></i>
-          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-        </span>
-      </a>
-    
-    
-    
-    
-  </section>
+    <div id="article-banner">
+  <h2>Archives</h2>
+  <p class="post-date">文章归档</p>
 </div>
+<main class="app-body" id="archives">
+  
+  
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2020
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/2020/01/09/自定义Glide圆角BitmapTransformation/" class="archive-title">自定义Glide圆角BitmapTransformation</a>
+        <p class="archive-date">01-09</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2019
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/2019/01/13/APP调用系统分享文本内容/" class="archive-title">APP调用系统分享文本内容</a>
+        <p class="archive-date">01-13</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2018
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/2018/12/02/密码强度计算/" class="archive-title">密码强度计算</a>
+        <p class="archive-date">12-02</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/08/09/Android-使用-Spannable-设置样式/" class="archive-title">Android 使用 Spannable 设置样式</a>
+        <p class="archive-date">08-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/08/08/Android一些资源尺寸数据/" class="archive-title">Android一些资源尺寸数据</a>
+        <p class="archive-date">08-08</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/08/08/google-services插件「No-match-found」BUG/" class="archive-title">google-services插件「No match found」BUG</a>
+        <p class="archive-date">08-08</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/07/25/Android-O-自动填充框架BUG及修复/" class="archive-title">Android O 自动填充框架BUG及修复</a>
+        <p class="archive-date">07-25</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/07/18/Android-获取程序运行时进程名的方法/" class="archive-title">Android 获取程序运行时进程名的方法</a>
+        <p class="archive-date">07-18</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/07/08/工作中常用的git命令/" class="archive-title">工作中常用的git命令</a>
+        <p class="archive-date">07-08</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/2018/07/08/hello-world/" class="archive-title">Hello World</a>
+        <p class="archive-date">07-08</p>
+      </div>
+    
+  </div>
+</section>
+  
+</main>
 
 <script>
   (function () {
-    $('.header').removeClass('fixed-header')
-    var windowH = $(window).height();
-    var author = $('.author')
-    var bodyH = author.offset().top + author[0].offsetHeight + 71;
-    if (bodyH < windowH) {
-      author.css({
-        'margin-bottom': windowH - bodyH
-      })
-    }
+    var url = 'https://seamanz.github.io/archives/2020/01/index.html';
+    $('#article-banner').geopattern(url);
+    $('.header').removeClass('fixed-header');
   })();
 </script>
-
     <div class="scroll-top">
   <span class="arrow-icon"></span>
 </div>
